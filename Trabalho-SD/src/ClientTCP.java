@@ -12,13 +12,13 @@ public class ClientTCP {
 
 	public static void main(String[] args){
 		Socket s;
+		Scanner reader = new Scanner(System.in);
 		try {
 			int option = 1;
 			s = new Socket("localhost", 1972);
 			while(option != 5){
 				System.out.println(
 				"1. Select | 2. Insert | 3.Update | 4.Delete | 5.Quit");
-				Scanner reader = new Scanner(System.in);
 				//Lê input from user
 				option = reader.nextInt();
 				OutputStream op = s.getOutputStream();	
@@ -40,6 +40,7 @@ public class ClientTCP {
 					e.printStackTrace();
 				}
 			}
+			reader.close();
 			s.close();
 		}catch (UnknownHostException e) {
 			e.printStackTrace();
