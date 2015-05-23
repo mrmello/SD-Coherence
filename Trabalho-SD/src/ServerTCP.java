@@ -5,11 +5,24 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class ServerTCP {
-
+	
+	private DBConnection con;
+    private Statement st;
+    private ResultSet rs;
+    
+    public ServerTCP() {
+      	 con = new DBConnection();
+    }
+    
 	public static void main(String[] args){
-
+		
+		ServerTCP server = new ServerTCP();
+		
 		ServerSocket serverSocket;
 		try {
 			serverSocket = new ServerSocket(1972);
@@ -25,16 +38,16 @@ public class ServerTCP {
 					option = (Integer)read.readObject();
 					switch(option){
 					case 1:
-						message = "Select";
+						message = server.selectExecute();
 					break;
 					case 2:
-						message = "Insert";
+						message = server.insertExecute();
 					break;
 					case 3:
-						message = "Update";
+						message = server.updateExecute();
 					break;
 					case 4:
-						message = "Delete";
+						message = server.deleteExecute();
 					break;
 					default:
 						message = "Please verify the option!";
@@ -55,6 +68,41 @@ public class ServerTCP {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private String selectExecute(){
+		String result = "";
+		try {
+    		con.connect(); 
+    		con.getConnection().setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+    		String query = "select * from students;";
+            st = con.getConnection().createStatement();
+            rs = st.executeQuery(query);
+            while(rs.next()) {
+            	String id = rs.getString("id");
+                String firstName = rs.getString("firstName");
+                String lastName = rs.getString("lastName");
+                String age = rs.getString("age");
+                                
+                result += id + "\t" + firstName + "\t" + lastName + "\t" + age + "\n";
+            }
+            con.disconnect(); 
+        } catch (Exception e) {
+        	System.out.println(e);
+        }    
+		return result;
+	}
+	
+	private String insertExecute(){
+		return "Call of Insert function";
+	}
+	
+	private String updateExecute(){
+		return "Call of Update function";
+	}
+	
+	private String deleteExecute(){
+		return "Call of Delete function";
 	}
 
 }
