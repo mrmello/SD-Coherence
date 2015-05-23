@@ -2,7 +2,6 @@ import java.sql.*;
 
 public class DBConnection {
 
-    // Replace <UTORid> and <DB_PASSWORD> with your login credentials.
     public static final String DRIVER   = "com.amazon.redshift.jdbc4.Driver";
     public static final String URL      = "jdbc:redshift://sd-cache.cocucpsul5bc.us-west-2.rds.amazonaws.com:5432/sd_cache";
     public static final String UID      = "mrmello";
